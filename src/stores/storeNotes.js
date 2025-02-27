@@ -9,16 +9,14 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  addDoc,
   query,
   orderBy,
   // limit,
 } from 'firebase/firestore';
 
 const notesCollectionRef = collection(db, 'notes');
-const noteCollectionQuery = query(
-  notesCollectionRef,
-  orderBy('created_at', 'desc')
-);
+const noteCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
 
 export const useStoreNotes = defineStore('storeNotes', {
   state: () => {
@@ -34,26 +32,29 @@ export const useStoreNotes = defineStore('storeNotes', {
         //   content: 'This is shorter notes.',
         // },
       ],
+      notesLoaded: false,
     };
   },
   actions: {
     async getNotes() {
+      this.notesLoaded = false;
       onSnapshot(noteCollectionQuery, (querySnapshot) => {
-        let notes = [];
+        let newNotes = [];
         querySnapshot.forEach((doc) => {
           let note = {
             id: doc.id,
             content: doc.data().content,
+            date: doc.data().date,
           };
-
-          notes.push(note);
+          newNotes.push(note);
         });
-        this.notes = notes;
+        this.notes = newNotes;
+        this.notesLoaded = true;
       });
     },
     async addNote(newNoteContent) {
-      const id = uuid();
-      const createdAt = new Date().toISOString();
+      // const id = uuid();
+      const createdAt = new Date().getTime();
 
       // let note = {
       //   id,
@@ -61,10 +62,9 @@ export const useStoreNotes = defineStore('storeNotes', {
       // };
       // this.notes.unshift(note);
 
-      await setDoc(doc(notesCollectionRef, id), {
+      await addDoc(notesCollectionRef, {
         content: newNoteContent,
-        created_at: createdAt,
-        id,
+        date: createdAt,
       });
     },
 

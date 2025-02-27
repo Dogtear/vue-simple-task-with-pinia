@@ -54,11 +54,26 @@ useWatchCharacters(newNote, 100);
     <!--   </div> -->
     <!-- </div> -->
 
-    <Note
-      v-for="note in storeNotes.notes"
-      :key="note.id"
-      :note="note"
-      @deleteCliked="storeNotes.deleteNote(note.id)"
+    <progress
+      v-if="!storeNotes.notesLoaded"
+      class="progress is-large is-success"
+      max="100"
     />
+
+    <template v-else>
+      <div
+        v-if="!storeNotes.notes.length"
+        class="is-size-4 has-text-centered has-text-grey-light is-family-monospace py-6"
+      >
+        No notes here yet, please add new notes.
+      </div>
+
+      <Note
+        v-for="note in storeNotes.notes"
+        :key="note.id"
+        :note="note"
+        @deleteCliked="storeNotes.deleteNote(note.id)"
+      />
+    </template>
   </div>
 </template>
