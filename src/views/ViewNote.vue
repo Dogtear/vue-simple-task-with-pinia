@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Note from '@/components/Note/Note.vue';
 import AddEditNote from '@/components/Note/AddEditNote.vue';
 import { useStoreNotes } from '@/stores/storeNotes';
@@ -18,6 +18,10 @@ const addNote = () => {
 };
 
 useWatchCharacters(newNote, 100);
+
+onMounted(() => {
+  storeNotes.getNotes();
+});
 </script>
 
 <template>

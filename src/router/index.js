@@ -2,6 +2,7 @@ import ViewStats from '@/views/ViewStats.vue';
 import ViewNote from '@/views/ViewNote.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import ViewEditNotes from '@/views/ViewEditNotes.vue';
+import ViewAuth from '@/views/ViewAuth.vue';
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: '/stats',
     name: 'stats',
     component: ViewStats,
+  },
+  {
+    path: '/auth',
+    name: 'auth',
+    component: ViewAuth,
   },
 ];
 
