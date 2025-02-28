@@ -20,7 +20,6 @@ const emit = defineEmits(['update:modalValue']);
 // Close modal
 const closeModal = () => {
   emit('update:modalValue', false);
-  // console.log(props.modalValue);
 };
 
 const modalCardRef = ref(null);
@@ -29,7 +28,6 @@ onClickOutside(modalCardRef, () => {
 });
 
 const handleKeyboard = (e) => {
-  console.log('handle keyboard');
   if (e.key === 'Escape') emit('update:modalValue', false);
 };
 

@@ -22,7 +22,7 @@ export const useStoreAuth = defineStore('storeAuth', {
           this.router.push('/');
         } else {
           this.user = {};
-          this.router.replace('/');
+          this.router.replace('');
         }
       });
     },
