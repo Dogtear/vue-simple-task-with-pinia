@@ -18,7 +18,6 @@ const credentials = reactive({
 });
 
 const isAuthenticated = computed(() => !!storeAuth.user?.id);
-console.log(isAuthenticated.value);
 
 const formTitle = computed(() => {
   return register.value ? 'Register' : 'Login';

@@ -14,9 +14,11 @@ import {
   orderBy,
   // limit,
 } from 'firebase/firestore';
+import { useStoreAuth } from './storeAuth';
 
-const notesCollectionRef = collection(db, 'notes');
-const noteCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
+let notesCollectionRef;
+let noteCollectionQuery;
+let getNotesSnapshot = null;
 
 export const useStoreNotes = defineStore('storeNotes', {
   state: () => {
@@ -36,9 +38,18 @@ export const useStoreNotes = defineStore('storeNotes', {
     };
   },
   actions: {
+    init() {
+      const storeAuth = useStoreAuth();
+
+      notesCollectionRef = collection(db, 'users', storeAuth.user.id, 'notes');
+      noteCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
+      // initialize dtabase refs
+      this.getNotes();
+    },
     async getNotes() {
       this.notesLoaded = false;
-      onSnapshot(noteCollectionQuery, (querySnapshot) => {
+
+      getNotesSnapshot = onSnapshot(noteCollectionQuery, (querySnapshot) => {
         let newNotes = [];
         querySnapshot.forEach((doc) => {
           let note = {
@@ -51,6 +62,10 @@ export const useStoreNotes = defineStore('storeNotes', {
         this.notes = newNotes;
         this.notesLoaded = true;
       });
+    },
+    clearNotes() {
+      this.notes = [];
+      if (getNotesSnapshot) getNotesSnapshot(); // unsubscribe from any active listener
     },
     async addNote(newNoteContent) {
       // const id = uuid();
